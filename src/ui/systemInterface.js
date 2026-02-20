@@ -30,24 +30,29 @@ export const systemInterface = async () => {
 export const createAccount = () => {
   console.log(chalk.bgGreen.black("Congratulation on choosing our bank."));
   console.log(chalk.green("Please set your account option below."));
-  buildAccount();
+  requestNameAccount();
 };
 
 //request for user name entry
-export const requestNameAccount = (nameAccount) => {
+export const requestNameAccount = async () => {
   try {
-    const anserUser = inquirer.prompt([
+    const anserUser = await inquirer.prompt([
       {
         name: "accountName",
         message: "Enter a name for your account: ",
       },
     ]);
+
+    const accountName = anserUser.accountName
+    buildAccount(accountName)
   } catch (err) {
     console.log(err);
   }
 };
 
-//Error messages
-export const errorMessages = (err) => {
-  console.log("This account already exits. Please choose another name!");
-};
+//success when creating account
+export const successMessage = (accountName) => {
+  if(requestNameAccount() === true){
+    console.log(`Congratulation Mr(s) ${accountName}, you account has bee created`)
+  }
+}
