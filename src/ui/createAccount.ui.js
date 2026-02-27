@@ -2,6 +2,8 @@ import chalk from 'chalk';
 import inquirer from 'inquirer';
 //service
 import buildAccount from '../services/createAccount.js';
+//helps
+import { checkInput } from '../services/helpers.js';
 
 export const createAccount = async () => {
   console.log(chalk.bgGreen.black('Congratulations on choosing our bank.'));
@@ -17,18 +19,7 @@ const requestNameAccount = async () => {
         {
           name: 'accountName',
           message: 'Enter a name for your account:',
-
-          validate: (input) => {
-            if (!input.trim()) {
-              return 'Account name cannot be empty';
-            }
-
-            if (/[\\/:*?"<>|]/.test(input)) {
-              return 'Name contains invalid characters';
-            }
-
-            return true;
-          },
+          validate: checkInput(3),
         },
       ]);
 

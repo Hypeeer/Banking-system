@@ -4,15 +4,9 @@ import path from 'path';
 const accountPath = path.resolve('src', 'repositories');
 //throws invalid name error
 export default async function buildAccount(accountName) {
-  if (!accountName || !accountName.trim()) {
-    throw new Error('Account name cannot be empty');
-  }
-
-  const safeName = accountName.replace(/[<>:"/\\|?*]/g, ''); // valid characters
-
   await fs.mkdir(accountPath, { recursive: true }); //creates and validates if it exists
 
-  const filePath = path.join(accountPath, `${safeName}.json`);
+  const filePath = path.join(accountPath, `${accountName}.json`);
 
   try {
     await fs.access(filePath); // If it exists, it doesn't throw an error, if it exists, it throws an error.
@@ -25,8 +19,9 @@ export default async function buildAccount(accountName) {
     const data = {
       name: accountName,
       balance: 0,
+      createAt: new Date().toISOString(),
     };
-    await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+    await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');
     return true;
   }
 }
